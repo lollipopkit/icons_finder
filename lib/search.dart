@@ -1,5 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:icons_finder/dialog.dart';
+import 'package:icons_finder/ext.dart';
 import 'package:icons_finder/future.dart';
 import 'package:icons_plus/icons_plus.dart';
 
@@ -42,7 +44,7 @@ final class IconSearchDelegate extends SearchDelegate<String> {
 
   Widget _buildList(BuildContext context) {
     return FutureWidget<Map<String, IconData>>(
-      future: _filter(query),
+      future: compute(_filter, query),
       loading: const SizedBox(
         width: 300,
         child: SizedBox(
@@ -69,32 +71,35 @@ final class IconSearchDelegate extends SearchDelegate<String> {
           itemCount: data.length,
           itemBuilder: (_, index) {
             final key = keys[index];
+            final item = data[key];
+            if (item == null) {
+              return const SizedBox();
+            }
+            final description = item.description;
             return ListTile(
               title: Text(key),
-              leading: Icon(data[key]),
-              trailing: Text(
-                  '${data[key]?.fontFamily} ${data[key]?.codePoint.toRadixString(16)}'),
-              onTap: () {
-                Navigator.pop(context);
-              },
+              leading: Icon(item),
+              subtitle: Text(
+                description,
+                style: const TextStyle(color: Colors.grey),
+              ),
+              onTap: () => showIconDialog(context, item, key),
             );
           },
         );
       },
     );
   }
+}
 
-  Future<Map<String, IconData>> _filter(String query) async {
-    return await compute((message) {
-      final map = <String, IconData>{};
-      for (final pack in packNames.values) {
-        for (final entry in pack.entries) {
-          if (entry.key.contains(message)) {
-            map[entry.key] = entry.value;
-          }
-        }
+Future<Map<String, IconData>> _filter(String keyword) async {
+  final map = <String, IconData>{};
+  for (final pack in packNames.values) {
+    for (final entry in pack.entries) {
+      if (entry.key.contains(keyword)) {
+        map[entry.key] = entry.value;
       }
-      return map;
-    }, query);
+    }
   }
+  return map;
 }

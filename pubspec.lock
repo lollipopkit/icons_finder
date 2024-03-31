@@ -102,9 +102,11 @@ packages:
   icons_plus:
     dependency: "direct main"
     description:
-      path: "../icons_plus"
-      relative: true
-    source: path
+      path: "."
+      ref: main
+      resolved-ref: "0b2917a0f0ce2c7f90e797b2e7c9c0113c2458b6"
+      url: "https://github.com/lollipopkit/icons_plus"
+    source: git
     version: "5.0.0"
   leak_tracker:
     dependency: transitive

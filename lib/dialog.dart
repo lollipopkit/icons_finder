@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:icons_finder/ext.dart';
 
 Future<String?> showIconDialog(
@@ -25,9 +26,11 @@ Future<String?> showIconDialog(
         actions: [
           TextButton(
             onPressed: () {
-              Navigator.pop(context);
+              final data = '${item.fontFamily ?? ''}.$key';
+              Clipboard.setData(ClipboardData(text: data));
+              Navigator.of(context).pop();
             },
-            child: const Text('Ok'),
+            child: const Text('Copy'),
           ),
         ],
       );

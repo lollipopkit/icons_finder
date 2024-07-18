@@ -29,5 +29,5 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: babf4553cf7602818620e29a0a781f71
-          projectName: icons_finder
+          projectName: icons-finder
           directory: build/web
